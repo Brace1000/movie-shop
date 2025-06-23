@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FilmFinder - Movie & TV Discovery</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <!-- This div is for the immersive backdrop on the detail page -->
+    <div id="detail-backdrop" class="detail-backdrop"></div>
+
+    <header>
+        <div class="container">
+            <a href="/" class="logo">
+                <i class="fa-solid fa-film"></i>
+                <h1>FilmFinder</h1>
+            </a>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Search for movies or TV shows...">
+            </div>
+            <nav>
+                <button id="home-btn" class="nav-btn active">Trending</button>
+                <button id="watchlist-btn" class="nav-btn">My Watchlist</button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="app" class="container">
+        <!-- Main content will be rendered here by JavaScript -->
+    </main>
+
+    <!-- Template for a movie/show card with enhanced structure -->
+    <template id="movie-card-template">
+        <div class="movie-card" tabindex="0">
+            <div class="card-poster-wrapper">
+                <img src="" alt="Poster" class="poster">
+                <div class="card-overlay">
+                    <i class="fa-solid fa-play play-icon"></i>
+                    <p class="card-view-details">View Details</p>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="title"></h3>
+                <p class="release-date"></p>
+            </div>
+        </div>
+    </template>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
