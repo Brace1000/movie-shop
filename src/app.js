@@ -109,16 +109,40 @@ export function renderGrid(items, source = 'tmdb') {
 }
 
 export async function renderDetails(type, id) {
-    const details = await apiFetch(`/${type}/${id}?append_to_response=credits`);
+    // Fetch both movie details and videos in parallel
+    const [details, videos] = await Promise.all([
+        apiFetch(`/${type}/${id}?append_to_response=credits`),
+        apiFetch(`/${type}/${id}/videos`)
+    ]);
+    
     if (!details) return;
 
     const onWatchlist = watchlistManager.isOnWatchlist(details.id);
     const genres = details.genres.map(g => g.name).join(', ');
     const cast = details.credits.cast.slice(0, 10).map(c => c.name).join(', ');
     
+    // Find the first official trailer
+    const trailer = videos?.results?.find(video => 
+        video.type === 'Trailer' && video.site === 'YouTube'
+    );
+
     app.innerHTML = `
         <div class="detail-view">
-            <div class="detail-poster"><img src="https://image.tmdb.org/t/p/w500${details.poster_path}" alt="${details.title || details.name} Poster"></div>
+            <div class="detail-poster">
+                <img src="https://image.tmdb.org/t/p/w500${details.poster_path}" alt="${details.title || details.name} Poster">
+                ${trailer ? `
+                    <div class="trailer-container">
+                        <iframe 
+                            width="560" 
+                            height="315" 
+                            src="https://www.youtube.com/embed/${trailer.key}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                ` : ''}
+            </div>
             <div class="detail-info">
                 <h2>${details.title || details.name} (${(details.release_date || details.first_air_date).split('-')[0]})</h2>
                 <div class="genres"><strong>Genres:</strong> ${genres}</div>
