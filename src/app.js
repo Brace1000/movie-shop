@@ -2,7 +2,6 @@ import { ID, Query } from 'appwrite';
 import { app, searchInput, movieCardTemplate, API_BASE_URL, API_OPTIONS, databases, DB_ID, COLLECTION_ID } from './variables.js';
 
 
-// This local cache of the watchlist improves UI responsiveness.
 let localWatchlist = [];
 
 // API & DATA FUNCTIONS
@@ -19,49 +18,67 @@ export async function apiFetch(endpoint) {
     }
 }
 
+
+
 export const watchlistManager = {
-    // Fetches the watchlist from Appwrite and populates the local cache.
+    // Fetch the watchlist from local memory
     fetch: async () => {
-        try {
-            const response = await databases.listDocuments(DB_ID, COLLECTION_ID);
-            localWatchlist = response.documents;
-            return localWatchlist;
-        } catch (error) {
-            console.error("Appwrite: Failed to fetch watchlist", error);
-            return [];
-        }
+        console.log("Fetching from local watchlist");
+        return localWatchlist;
     },
-    // Adds an item to Appwrite and the local cache.
+    
+    // Add an item to the local watchlist
     add: async (item) => {
-        try {
-            const doc = await databases.createDocument(DB_ID, COLLECTION_ID, ID.unique(), {
-                itemId: item.id,
-                itemType: item.type,
-                title: item.title,
-                posterPath: item.poster_path,
-                releaseDate: item.release_date,
-            });
-            localWatchlist.push(doc);
-        } catch (error) {
-            console.error("Appwrite: Failed to add to watchlist", error);
-        }
+        console.log("Adding to local watchlist:", item.title);
+        const newItem = {
+            $id: `local_${Date.now()}`,
+            itemId: item.id,
+            itemType: item.type,
+            title: item.title,
+            posterPath: item.poster_path,
+            releaseDate: item.release_date,
+        };
+        localWatchlist.push(newItem);
+        return newItem;
     },
-    // Removes an item from Appwrite and the local cache.
+    
+    // Remove an item from the local watchlist
     remove: async (itemId) => {
-        const watchlistItem = localWatchlist.find(w => w.itemId === itemId);
-        if (watchlistItem) {
-            try {
-                await databases.deleteDocument(DB_ID, COLLECTION_ID, watchlistItem.$id);
-                localWatchlist = localWatchlist.filter(w => w.itemId !== itemId);
-            } catch (error) {
-                console.error("Appwrite: Failed to remove from watchlist", error);
-            }
-        }
+        console.log("Removing from local watchlist:", itemId);
+        localWatchlist = localWatchlist.filter(w => w.itemId !== itemId);
+        return true;
     },
-    // Checks the local cache to see if an item is on the watchlist.
-    isOnWatchlist: (itemId) => !!localWatchlist.find(w => w.itemId === itemId),
+    
+    // Check if an item is in the local watchlist
+    isOnWatchlist: (itemId) => {
+        return localWatchlist.some(w => w.itemId === itemId);
+    },
+    
+   
+    initSampleData: () => {
+        localWatchlist = [
+            {
+                $id: 'sample1',
+                itemId: 550,
+                itemType: 'movie',
+                title: 'Fight Club',
+                posterPath: '/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',
+                releaseDate: '1999-10-15'
+            },
+            {
+                $id: 'sample2',
+                itemId: 155,
+                itemType: 'movie',
+                title: 'The Dark Knight',
+                posterPath: '/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
+                releaseDate: '2008-07-16'
+            }
+        ];
+    }
 };
 
+// Initialize with sample data (optional)
+watchlistManager.initSampleData();
 // --- UI RENDERING FUNCTIONS ---
 export function renderGrid(items, source = 'tmdb') {
     app.innerHTML = '';
