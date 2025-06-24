@@ -16,7 +16,6 @@ export const API_OPTIONS = {
   },
 };
 
-// --- APPWRITE CONFIG ---
 const client = new Client();
 client
     .setEndpoint('https://cloud.appwrite.io/v1')
