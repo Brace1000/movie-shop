@@ -1,6 +1,4 @@
 /**
- * Creates a debounced function that delays invoking the provided function
- * until after `delay` milliseconds have elapsed since the last time it was invoked.
  * @param {Function} func 
  * @param {number} delay 
  * @returns {Function} 
