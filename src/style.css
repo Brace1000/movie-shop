@@ -303,7 +303,7 @@ header .nav-btn.active::after, header .nav-btn:hover::after { transform: scaleX(
 }
 .error-message { color: var(--accent-hover); }
 
-/* --- RESPONSIVE DESIGN --- */
+
 @media (max-width: 900px) {
     .detail-view { grid-template-columns: 1fr; text-align: center; }
     .detail-poster { margin: 0 auto; max-width: 300px; }
@@ -320,7 +320,7 @@ header .nav-btn.active::after, header .nav-btn:hover::after { transform: scaleX(
 .trailer-container {
     margin-top: 20px;
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%; 
     height: 0;
     overflow: hidden;
 }

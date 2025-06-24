@@ -77,7 +77,7 @@ export const watchlistManager = {
     }
 };
 
-// Initialize with sample data (optional)
+
 watchlistManager.initSampleData();
 // --- UI RENDERING FUNCTIONS ---
 export function renderGrid(items, source = 'tmdb') {
@@ -109,7 +109,7 @@ export function renderGrid(items, source = 'tmdb') {
 }
 
 export async function renderDetails(type, id) {
-    // Fetch both movie details and videos in parallel
+   
     const [details, videos] = await Promise.all([
         apiFetch(`/${type}/${id}?append_to_response=credits`),
         apiFetch(`/${type}/${id}/videos`)
